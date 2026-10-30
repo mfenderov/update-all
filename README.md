@@ -5,9 +5,13 @@ One command to update everything. Runs on macOS and Linux.
 ## Install
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/mfenderov/update-all/main/update-all -o ~/.local/bin/update-all
+curl -fsSL -H "Authorization: Bearer $(gh auth token)" \
+  https://raw.githubusercontent.com/mfenderov/update-all/main/update-all \
+  -o ~/.local/bin/update-all
 chmod +x ~/.local/bin/update-all
 ```
+
+(requires `gh` authenticated on that machine; the repo is private)
 
 Optional wrapper for `~/.zshrc` (keeps the function name stable if the file moves):
 
