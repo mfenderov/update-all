@@ -22,6 +22,14 @@ if ! command -v brew >/dev/null && [[ -x /usr/local/bin/brew ]]; then
   export PATH="/usr/local/bin:$PATH"
 fi
 
+_upd_claude_marketplaces() {
+  # Best-effort: a flaky marketplace must not block plugin updates or fail the run.
+  { claude plugin marketplace update || print -- "  warning: some marketplaces could not be refreshed"; } </dev/null
+}
+_upd_copilot_marketplaces() {
+  # Best-effort, same reason as above.
+  { copilot plugin marketplace update || print -- "  warning: some marketplaces could not be refreshed"; } </dev/null
+}
 _upd_claude_plugins() {
   command -v jq >/dev/null || return 0
   local -a _plugins
@@ -46,9 +54,9 @@ _s_bun()             { { bun upgrade && bun update -g; } </dev/null }
 _s_rustup()          { { rustup update; } </dev/null }
 _s_opencode()        { { opencode update && opencode plugin update; } </dev/null }
 _s_opencode_svc()    { { opencode service restart; } </dev/null }
-_s_claude()          { { claude update && claude plugin marketplace update && _upd_claude_plugins; } </dev/null }
+_s_claude()          { { claude update && _upd_claude_marketplaces && _upd_claude_plugins; } </dev/null }
 _s_pi()              { { pi update --all && pi update --models; } </dev/null }
-_s_copilot()         { { copilot update && copilot plugin marketplace update && copilot plugin update --all; } </dev/null }
+_s_copilot()         { { copilot update && _upd_copilot_marketplaces && copilot plugin update --all; } </dev/null }
 _s_crush()           { { crush update-providers && crush update-providers --source=hyper; } </dev/null }
 _s_uv()              { { uv self update && uv tool upgrade --all; } </dev/null }
 _s_gh()              { { gh extension upgrade --all; } </dev/null }
