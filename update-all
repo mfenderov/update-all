@@ -50,7 +50,7 @@ _upd_claude_plugins() {
 _s_brew()            { { brew update && brew upgrade && brew cleanup; } </dev/null }
 _s_omz()             { { zsh "${ZSH:-$HOME/.oh-my-zsh}/tools/upgrade.sh"; } </dev/null }
 _s_npm()             { { npm install -g npm && npm update -g; } </dev/null }
-_s_bun()             { { bun upgrade && bun update -g; } </dev/null }
+_s_bun()             { { bun upgrade || print -- '  warning: bun upgrade failed (GitHub API rate limit? try GITHUB_TOKEN=$(gh auth token) bun upgrade)'; bun update -g; } </dev/null }
 _s_rustup()          { { rustup update; } </dev/null }
 _s_opencode()        { { opencode update && opencode plugin update; } </dev/null }
 _s_opencode_svc()    { { opencode service restart; } </dev/null }
